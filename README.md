@@ -8,10 +8,10 @@
 ## 📸 Screenshots
 
 *Placeholders for UI showcases*
-- ![Dashboard](/docs/screenshots/dashboard.png)
-- ![Dispute Center](/docs/screenshots/dispute-center.png)
-- ![Change Detection](/docs/screenshots/change-detection.png)
-- ![Citizen Registry](/docs/screenshots/citizen-registry.png)
+- ![Dashboard](/docs/screenshots/dashboard.svg)
+- ![Dispute Center](/docs/screenshots/dispute-center.svg)
+- ![Change Detection](/docs/screenshots/change-detection.svg)
+- ![Citizen Registry](/docs/screenshots/citizen-registry.svg)
 
 ## 📖 Background
 Under modern land governance programs (such as the NAKSHA Programme), large volumes of geospatial data are generated through drone surveys, Orthorectified Imagery (ORI), DSM/DTM datasets, Ground Truthing (GT), GNSS surveys, municipal records, utility databases, and revenue land records. Harmonization and integration of these datasets currently depend on manual GIS workflows, which are time-consuming and prone to errors.
