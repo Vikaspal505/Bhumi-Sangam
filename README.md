@@ -1,6 +1,6 @@
 # Bhumi Sangam - GeoCadAI Enterprise Platform
 
-**Live Demo:** [https://YOUR-VERCEL-URL.vercel.app](https://bhumisangam.vercel.app/#/map)
+**Live Demo:** [PROJECT PROTOTYPE ](https://bhumisangam.vercel.app/#/map)
 
 > **Urban Land Administration and Cadastral Management System (SIH 2026 - PS 26013)**
 > An AI-enabled geospatial integration platform designed to automatically integrate, harmonize, validate, and synchronize multi-source land-related datasets with AI-generated feature extraction outputs.
