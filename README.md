@@ -8,9 +8,13 @@
 ## 📸 Screenshots
 
 *Placeholders for UI showcases*
+# Dashboard 
 - ![Dashboard](/docs/screenshots/dashboard.png)
+- # Dispute Center 
 - ![Dispute Center](/docs/screenshots/dispute-center.png)
+- # Change Detection
 - ![Change Detection](/docs/screenshots/change-detection.png)
+- # Citizen Registry
 - ![Citizen Registry](/docs/screenshots/citizen-registry.png)
 
 ## 📖 Background
