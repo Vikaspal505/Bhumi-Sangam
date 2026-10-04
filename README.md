@@ -8,7 +8,7 @@
 ## 📸 Screenshots
 
 *Placeholders for UI showcases*
-- ![Dashboard](/docs/screenshots/dashboard.svg)
+- ![Dashboard](/docs/screenshots/dashboard.png)
 - ![Dispute Center](/docs/screenshots/dispute-center.svg)
 - ![Change Detection](/docs/screenshots/change-detection.svg)
 - ![Citizen Registry](/docs/screenshots/citizen-registry.svg)
