@@ -2,6 +2,7 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // Authentication Checks
     function isSignedIn() {
       return request.auth != null;
     }
@@ -10,6 +11,7 @@ service cloud.firestore {
       return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
     }
 
+    // Role Checks
     function hasRole(role) {
       return isSignedIn() && (
         (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && getUserData().role == role) ||
@@ -18,90 +20,95 @@ service cloud.firestore {
     }
 
     function isAdmin() {
-      return hasRole('system_admin');
+      return hasRole('System Admin');
     }
 
     function isRevenueOfficer() {
-      return hasRole('revenue_officer') || isAdmin();
+      return hasRole('Revenue Officer') || isAdmin();
     }
 
     function isSurveyor() {
-      return hasRole('field_surveyor') || isAdmin();
+      return hasRole('Field Surveyor') || isAdmin();
     }
 
-    // Users: readable by authenticated users and demo sessions, writable by user/admin
+    function isPublicViewer() {
+      return hasRole('Public Viewer');
+    }
+
+    // 1. Users Directory:
+    // Only signed-in users can read, only Admins can create/update/delete.
     match /users/{userId} {
-      allow read: if true;
-      allow create, update: if true;
-      allow delete: if isAdmin();
+      allow read: if isSignedIn();
+      allow create, update, delete: if isAdmin();
     }
 
-    // Parcels: public read, write by revenue officer or admin
+    // 2. Finalized Parcels & Datasets:
+    // Public Viewers can read. Admins and Revenue Officers can write/update.
     match /parcels/{parcelId} {
-      allow read: if true;
+      allow read: if isPublicViewer() || isSignedIn();
       allow write: if isRevenueOfficer();
     }
 
-    // Datasets: read by signed in, write by admin
     match /datasets/{datasetId} {
-      allow read: if true;
+      allow read: if isPublicViewer() || isSignedIn();
       allow write: if isAdmin();
     }
 
-    // Pipeline Runs
+    // 3. Cadastral Workflows & Pipeline:
+    // Private to active staff. Public Viewers have NO access.
     match /pipelineRuns/{runId} {
-      allow read: if isSignedIn();
-      allow write: if isAdmin() || isRevenueOfficer();
+      allow read: if isRevenueOfficer() || isSurveyor();
+      allow write: if isRevenueOfficer();
     }
 
-    // Conflicts
+    // 4. Disputes & Mutations:
+    // Only Revenue Officers (and Admins) can read/write.
     match /conflicts/{conflictId} {
-      allow read: if isSignedIn();
-      allow write: if isRevenueOfficer();
+      allow read, write: if isRevenueOfficer();
     }
 
-    // Approvals
     match /approvals/{approvalId} {
-      allow read: if isSignedIn();
-      allow write: if isRevenueOfficer();
+      allow read, write: if isRevenueOfficer();
     }
 
-    // Survey Tasks
+    // 5. Field Ground-Truthing & Topology Tasks:
+    // Surveyors can write/update. Officers can read/assign.
     match /surveyTasks/{taskId} {
-      allow read: if isSignedIn();
-      allow create: if isRevenueOfficer() || isAdmin();
-      allow update: if isSurveyor() || isRevenueOfficer() || isAdmin();
+      allow read: if isSurveyor() || isRevenueOfficer();
+      allow create: if isRevenueOfficer();
+      allow update: if isSurveyor() || isRevenueOfficer();
       allow delete: if isAdmin();
     }
 
-    // GNSS Points
     match /gnssPoints/{pointId} {
-      allow read: if true;
+      allow read: if isSurveyor() || isRevenueOfficer();
       allow write: if isSurveyor();
     }
 
-    // Audit Logs: readable by admin, appendable by authenticated users
+    // 6. Audit Logs:
+    // Read-only for admins. Append-only for all logged-in staff. No delete.
     match /auditLogs/{logId} {
       allow read: if isAdmin();
       allow create: if isSignedIn();
-      allow update, delete: if false; // immutable audit log
+      allow update, delete: if false; // Immutable
     }
 
-    // Issue Reports: public create, read by signed-in users
+    // 7. Issue Reports:
+    // Public can create. Staff can read/update.
     match /issueReports/{reportId} {
       allow create: if true;
       allow read: if isSignedIn();
-      allow update, delete: if isRevenueOfficer() || isAdmin();
+      allow update, delete: if isRevenueOfficer();
     }
 
-    // Chat History: subcollection per user
+    // 8. Personal Chat History
     match /chatHistory/{userId}/messages/{messageId} {
       allow read, write: if isSignedIn() && (request.auth.uid == userId || isAdmin());
     }
 
-    // Test connection doc
-    match /test/{docId} {
-      allow read: if true;
+    // 9. Default catch-all (Secure by Default)
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }
