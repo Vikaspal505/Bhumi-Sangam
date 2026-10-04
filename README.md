@@ -10,7 +10,7 @@
 *Placeholders for UI showcases*
 - ![Dashboard](/docs/screenshots/dashboard.png)
 - ![Dispute Center](/docs/screenshots/dispute-center.png)
-- ![Change Detection](/docs/screenshots/change-detection.svg)
+- ![Change Detection](/docs/screenshots/change-detection.png)
 - ![Citizen Registry](/docs/screenshots/citizen-registry.svg)
 
 ## 📖 Background
